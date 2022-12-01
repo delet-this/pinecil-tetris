@@ -1,4 +1,4 @@
-use bitvec::{bitarr, BitArr, order::Lsb0, macros::internal::funty::Fundamental, ptr::BitRef, slice::BitSliceIndex};
+use bitvec::{bitarr, BitArr, order::Lsb0};
 use oorandom::Rand32;
 
 #[derive(Clone, Copy)]

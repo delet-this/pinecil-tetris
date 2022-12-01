@@ -5,7 +5,7 @@ mod game;
 
 use embedded_graphics::mono_font::MonoTextStyle;
 use embedded_graphics::mono_font::ascii::FONT_4X6;
-use embedded_graphics::text::{Text, Baseline, Alignment};
+use embedded_graphics::text::{Text, Alignment};
 use game::Tetris;
 use numtoa::NumToA;
 
