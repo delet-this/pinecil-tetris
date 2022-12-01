@@ -1,0 +1,37 @@
+[package]
+name = "pinecil-tetris"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "pinecil-tetris" # "{{project-name}}" -> "app"
+test = false
+bench = false
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bitvec = { version = "1.0.1", default-features = false }
+embedded-graphics = "0.7.1"
+embedded-hal = "0.2.7"
+gd32vf103-pac = "0.4.0"
+gd32vf103xx-hal = "0.5.0"
+heapless = "0.7.16"
+numtoa = "0.2.4"
+oorandom = "11.1.3"
+panic-halt = "0.2.0"
+riscv =  { version = "0.10.0", features = ["critical-section-single-hart"] }
+riscv-rt = "0.9.0"
+ssd1306 = "0.7.1"
+
+[profile.dev]
+codegen-units = 1
+incremental = false
+
+[profile.release]
+codegen-units = 1 # less parallel codegen units for better optimization with the cost of longer compile times
+# debug = true # debuginfo shouldn't affect size on flash/rom: https://docs.rust-embedded.org/book/unsorted/speed-vs-size.html
+strip = true # strip debug symbols
+lto = true
+opt-level = "s" # optimize for size
+# opt-level = "z" # optimize for size with even higher performance cost
