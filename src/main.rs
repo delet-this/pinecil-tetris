@@ -262,15 +262,6 @@ fn draw(game: &mut Tetris, disp: &mut DisplayTypeAlias) {
         .draw(disp)
         .unwrap();
 
-    // Text::with_baseline(
-    //     "Score:",
-    //     Point::new(2, 6),
-    //     character_style,
-    //     Baseline::Top,
-    // )
-    // .draw(disp).unwrap();
-    //
-
     Text::with_alignment(
         game.get_score().numtoa_str(10, &mut buf),
         Point::new(8, 15),
@@ -319,10 +310,10 @@ fn TIMER1() {
             timer1.clear_update_interrupt_flag();
         }
 
-        if let Some(ref mut game) = &mut *G_GAME.borrow(cs).borrow_mut() {
+        if let Some(game) = &mut *G_GAME.borrow(cs).borrow_mut() {
             game.run();
 
-            if let Some(ref mut disp) = &mut *G_DISP.borrow(cs).borrow_mut() {
+            if let Some(disp) = &mut *G_DISP.borrow(cs).borrow_mut() {
                 draw(game, disp);
             }
         }
@@ -340,13 +331,13 @@ fn EXTI_LINE0() {
 
     critical_section::with(|cs| {
         let mut ended = false;
-        if let Some(ref mut game) = &mut *G_GAME.borrow(cs).borrow_mut() {
+        if let Some(game) = &mut *G_GAME.borrow(cs).borrow_mut() {
             if game.has_ended() {
                 ended = true;
             }
             game.rotate_block();
 
-            if let Some(ref mut disp) = &mut *G_DISP.borrow(cs).borrow_mut() {
+            if let Some(disp) = &mut *G_DISP.borrow(cs).borrow_mut() {
                 draw(game, disp);
             }
         }
@@ -366,14 +357,14 @@ fn EXTI_LINE1() {
 
     critical_section::with(|cs| {
         let mut ended = false;
-        if let Some(ref mut game) = &mut *G_GAME.borrow(cs).borrow_mut() {
+        if let Some(game) = &mut *G_GAME.borrow(cs).borrow_mut() {
             if game.has_ended() {
                 ended = true;
             }
 
             game.move_block();
 
-            if let Some(ref mut disp) = &mut *G_DISP.borrow(cs).borrow_mut() {
+            if let Some(disp) = &mut *G_DISP.borrow(cs).borrow_mut() {
                 draw(game, disp);
             }
         }
