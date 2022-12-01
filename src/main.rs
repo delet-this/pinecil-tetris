@@ -138,7 +138,6 @@ fn main() -> ! {
         pac::ECLIC::unmask(pac::Interrupt::EXTI_LINE1);
         pac::ECLIC::unmask(pac::Interrupt::TIMER1);
         riscv::interrupt::enable();
-        riscv::register::mstatus::set_mie();
     };
 
     // OLED reset: Pull low to reset.
