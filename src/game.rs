@@ -17,7 +17,7 @@ enum MoveDirection {
     Right,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 pub struct Block {
     pub block_type: BlockType,
     pub shape: [BitArr!(for 4); 4], 
@@ -172,8 +172,8 @@ impl Tetris {
     }
 
     pub fn rotate_block(&mut self) {
-        if let Some(block) = self.current_block {
-            let mut rotated_block: Block = block;
+        if let Some(block) = self.current_block.clone() {
+            let mut rotated_block: Block = block.clone();
             // the bitarray is rectangular
             let dim: usize = block.size.into();
             for i in 0..dim {
@@ -213,8 +213,8 @@ impl Tetris {
         self.grid
     }
 
-    pub const fn get_block(&self) -> Option<Block> {
-        self.current_block
+    pub fn get_block(&self) -> Option<Block> {
+        self.current_block.clone()
     }
 
     pub const fn get_score(&self) -> u32 {
@@ -246,7 +246,7 @@ impl Tetris {
 
     fn fall(&mut self) {
         if let Some(block) = &mut self.current_block {
-            let mut fallen_block: Block = *block;
+            let mut fallen_block: Block = block.clone();
             fallen_block.pos.1 += 1;
             // if self.bounds_check(&fallen_block) {
                 self.current_block.replace(fallen_block);
@@ -337,7 +337,7 @@ impl Tetris {
     }
 
     pub fn move_block(&mut self) {
-        if let Some(block) = self.current_block {
+        if let Some(block) = self.current_block.clone() {
             let mut moved_block = block;
             match &self.move_direction {
                 MoveDirection::Left => {
