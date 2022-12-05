@@ -169,9 +169,8 @@ impl Tetris {
     }
 
     fn bounds_check(&mut self, block: &Block) -> bool {
-        let dim = block.shape.len();
-        for i in 0..dim {
-            for j in 0..dim {
+        for (i, _) in block.shape.iter().enumerate() {
+            for (j, _) in block.shape.iter().enumerate() {
                 if let Some(bit) = block.shape[i].get(j) {
                     let x = block.pos.0 + j as i8;
                     let y = block.pos.1 + i as i8;
@@ -229,9 +228,7 @@ impl Tetris {
         if let Some(block) = &mut self.current_block {
             let mut fallen_block: Block = block.clone();
             fallen_block.pos.1 += 1;
-            // if self.bounds_check(&fallen_block) {
-                self.current_block.replace(fallen_block);
-            // }
+            self.current_block.replace(fallen_block);
         }
     }
 
