@@ -1,4 +1,4 @@
-use bitvec::{bitarr, BitArr, order::Lsb0};
+use bitvec::{bitarr, order::Lsb0, BitArr};
 use oorandom::Rand32;
 
 enum MoveDirection {
@@ -8,9 +8,9 @@ enum MoveDirection {
 
 #[derive(Clone)]
 pub struct Block {
-    pub shape: [BitArr!(for 4); 4], 
+    pub shape: [BitArr!(for 4); 4],
     pub size: u8,
-    pub pos: (i8, i8), 
+    pub pos: (i8, i8),
 }
 
 impl Block {
@@ -23,7 +23,7 @@ impl Block {
     }
 
     pub fn create_square() -> Self {
-        Self { 
+        Self {
             shape: [
                 bitarr![1, 1, 0, 0],
                 bitarr![1, 1, 0, 0],
@@ -31,12 +31,12 @@ impl Block {
                 bitarr![0, 0, 0, 0],
             ],
             size: 2,
-            pos: (8/2, 1),
+            pos: (8 / 2, 1),
         }
     }
 
     pub fn create_l() -> Self {
-        Self { 
+        Self {
             shape: [
                 bitarr![0, 0, 1, 0],
                 bitarr![1, 1, 1, 0],
@@ -44,12 +44,12 @@ impl Block {
                 bitarr![0, 0, 0, 0],
             ],
             size: 3,
-            pos: (8/2, 1),
+            pos: (8 / 2, 1),
         }
     }
 
     pub fn create_j() -> Self {
-        Self { 
+        Self {
             shape: [
                 bitarr![1, 0, 0, 0],
                 bitarr![1, 1, 1, 0],
@@ -57,12 +57,12 @@ impl Block {
                 bitarr![0, 0, 0, 0],
             ],
             size: 3,
-            pos: (8/2, 1),
+            pos: (8 / 2, 1),
         }
     }
 
     pub fn create_z() -> Self {
-        Self { 
+        Self {
             shape: [
                 bitarr![1, 1, 0, 0],
                 bitarr![0, 1, 1, 0],
@@ -70,12 +70,12 @@ impl Block {
                 bitarr![0, 0, 0, 0],
             ],
             size: 3,
-            pos: (8/2, 1),
+            pos: (8 / 2, 1),
         }
     }
 
     pub fn create_s() -> Self {
-        Self { 
+        Self {
             shape: [
                 bitarr![0, 1, 1, 0],
                 bitarr![1, 1, 0, 0],
@@ -83,33 +83,33 @@ impl Block {
                 bitarr![0, 0, 0, 0],
             ],
             size: 3,
-            pos: (8/2, 1),
+            pos: (8 / 2, 1),
         }
     }
 
     pub fn create_t() -> Self {
-        Self { 
+        Self {
             shape: [
                 bitarr![0, 1, 0, 0],
                 bitarr![1, 1, 1, 0],
                 bitarr![0, 0, 0, 0],
                 bitarr![0, 0, 0, 0],
-            ], 
+            ],
             size: 3,
-            pos: (8/2, 1)
+            pos: (8 / 2, 1),
         }
     }
 
     pub fn create_i() -> Self {
-        Self { 
+        Self {
             shape: [
                 bitarr![0, 0, 0, 0],
                 bitarr![1, 1, 1, 1],
                 bitarr![0, 0, 0, 0],
                 bitarr![0, 0, 0, 0],
-            ], 
+            ],
             size: 4,
-            pos: (8/2, 2)
+            pos: (8 / 2, 2),
         }
     }
 }
@@ -175,7 +175,7 @@ impl Tetris {
                     let x = block.pos.0 + j as i8;
                     let y = block.pos.1 + i as i8;
                     if bit == true {
-                        if y < 0 || y > (self.grid.len()-1) as i8 || x > 7 || x < 0 {
+                        if y < 0 || y > (self.grid.len() - 1) as i8 || x > 7 || x < 0 {
                             return false;
                         } else if let Some(grid_bit) = self.grid[y as usize].get(x as usize) {
                             if grid_bit == true {
@@ -207,13 +207,12 @@ impl Tetris {
                 for (j, bit) in block.shape[i].iter().enumerate() {
                     let x = block.pos.0 as usize + j;
                     let y = block.pos.1 as usize + i;
-                    if y >= (self.grid.len()-1) {
+                    if y >= (self.grid.len() - 1) {
                         if *bit {
                             return true;
                         }
                         continue;
-                    }
-                    else if let Some(grid_bit) = self.grid[y+1].get(x) {
+                    } else if let Some(grid_bit) = self.grid[y + 1].get(x) {
                         if *bit && *grid_bit {
                             return true;
                         }
@@ -253,10 +252,12 @@ impl Tetris {
         for y in (0..row).rev() {
             for x in 0..self.grid[y].len() {
                 let mut b: Option<bool> = None;
-                if let Some(bit) = self.grid[y].get(x) { b = Some(*bit); }
+                if let Some(bit) = self.grid[y].get(x) {
+                    b = Some(*bit);
+                }
                 // copy value to row below
                 if let Some(bb) = b {
-                    self.grid[y+1].set(x, bb);
+                    self.grid[y + 1].set(x, bb);
                 }
                 self.grid[y].set(x, false);
             }
@@ -307,7 +308,7 @@ impl Tetris {
                         moved_block.move_right();
                         moved_block.move_right();
                         self.move_direction = MoveDirection::Right;
-                    }                
+                    }
                 }
                 MoveDirection::Right => {
                     moved_block.move_right();
@@ -315,7 +316,7 @@ impl Tetris {
                         moved_block.move_left();
                         moved_block.move_left();
                         self.move_direction = MoveDirection::Left;
-                    }                
+                    }
                 }
             }
             self.current_block.replace(moved_block);

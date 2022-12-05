@@ -3,9 +3,9 @@
 
 mod game;
 
-use embedded_graphics::mono_font::MonoTextStyle;
 use embedded_graphics::mono_font::ascii::FONT_4X6;
-use embedded_graphics::text::{Text, Alignment};
+use embedded_graphics::mono_font::MonoTextStyle;
+use embedded_graphics::text::{Alignment, Text};
 use game::Tetris;
 use numtoa::NumToA;
 
@@ -209,7 +209,8 @@ fn draw(game: &mut Tetris, disp: &mut DisplayTypeAlias) {
             character_style,
             Alignment::Center,
         )
-        .draw(disp).unwrap();
+        .draw(disp)
+        .unwrap();
 
         Text::with_alignment(
             "over",
@@ -217,15 +218,12 @@ fn draw(game: &mut Tetris, disp: &mut DisplayTypeAlias) {
             character_style,
             Alignment::Center,
         )
-        .draw(disp).unwrap();
+        .draw(disp)
+        .unwrap();
 
-        Text::with_alignment(
-            "Pts",
-            Point::new(8, 43),
-            character_style,
-            Alignment::Center,
-        )
-        .draw(disp).unwrap();
+        Text::with_alignment("Pts", Point::new(8, 43), character_style, Alignment::Center)
+            .draw(disp)
+            .unwrap();
 
         Text::with_alignment(
             game.get_score().numtoa_str(10, &mut buf),
@@ -233,13 +231,14 @@ fn draw(game: &mut Tetris, disp: &mut DisplayTypeAlias) {
             character_style,
             Alignment::Center,
         )
-        .draw(disp).unwrap();
+        .draw(disp)
+        .unwrap();
 
         disp.flush().unwrap();
         return;
     }
 
-    const VERT_OFFSET: i32 = 2*16;
+    const VERT_OFFSET: i32 = 2 * 16;
 
     Rectangle::new(Point::new(0, 0), Size::new(1, 32))
         .into_styled(thin_stroke)
@@ -267,7 +266,8 @@ fn draw(game: &mut Tetris, disp: &mut DisplayTypeAlias) {
         character_style,
         Alignment::Center,
     )
-    .draw(disp).unwrap();
+    .draw(disp)
+    .unwrap();
 
     if let Some(block) = game.get_block() {
         for (i, row) in block.shape.iter().enumerate() {
