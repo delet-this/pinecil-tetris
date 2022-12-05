@@ -1,17 +1,6 @@
 use bitvec::{bitarr, BitArr, order::Lsb0};
 use oorandom::Rand32;
 
-#[derive(Clone, Copy)]
-pub enum BlockType {
-    Square,
-    L,
-    J,
-    Z,
-    S,
-    T,
-    I,
-}
-
 enum MoveDirection {
     Left,
     Right,
@@ -19,7 +8,6 @@ enum MoveDirection {
 
 #[derive(Clone)]
 pub struct Block {
-    pub block_type: BlockType,
     pub shape: [BitArr!(for 4); 4], 
     pub size: u8,
     pub pos: (i8, i8), 
@@ -36,7 +24,6 @@ impl Block {
 
     pub fn create_square() -> Self {
         Self { 
-            block_type: BlockType::Square,
             shape: [
                 bitarr![1, 1, 0, 0],
                 bitarr![1, 1, 0, 0],
@@ -50,7 +37,6 @@ impl Block {
 
     pub fn create_l() -> Self {
         Self { 
-            block_type: BlockType::L,
             shape: [
                 bitarr![0, 0, 1, 0],
                 bitarr![1, 1, 1, 0],
@@ -64,7 +50,6 @@ impl Block {
 
     pub fn create_j() -> Self {
         Self { 
-            block_type: BlockType::J,
             shape: [
                 bitarr![1, 0, 0, 0],
                 bitarr![1, 1, 1, 0],
@@ -78,7 +63,6 @@ impl Block {
 
     pub fn create_z() -> Self {
         Self { 
-            block_type: BlockType::Z,
             shape: [
                 bitarr![1, 1, 0, 0],
                 bitarr![0, 1, 1, 0],
@@ -92,7 +76,6 @@ impl Block {
 
     pub fn create_s() -> Self {
         Self { 
-            block_type: BlockType::S,
             shape: [
                 bitarr![0, 1, 1, 0],
                 bitarr![1, 1, 0, 0],
@@ -106,7 +89,6 @@ impl Block {
 
     pub fn create_t() -> Self {
         Self { 
-            block_type: BlockType::T,
             shape: [
                 bitarr![0, 1, 0, 0],
                 bitarr![1, 1, 1, 0],
@@ -120,7 +102,6 @@ impl Block {
 
     pub fn create_i() -> Self {
         Self { 
-            block_type: BlockType::I,
             shape: [
                 bitarr![0, 0, 0, 0],
                 bitarr![1, 1, 1, 1],
