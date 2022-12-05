@@ -297,23 +297,6 @@ impl Tetris {
         false
     }
 
-    fn block_at_edge(&self) -> bool {
-        if let Some(block) = &self.current_block {
-            for (i, _) in block.shape.iter().enumerate() {
-                for (j, bit) in block.shape[i].iter().enumerate() {
-                    if *bit {
-                        let x = j as i8 + block.pos.0;
-                        if x == 0 || x == 7 {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-
-        false
-    }
-
     pub fn move_block(&mut self) {
         if let Some(block) = self.current_block.clone() {
             let mut moved_block = block;
