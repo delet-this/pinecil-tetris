@@ -329,19 +329,16 @@ fn EXTI_LINE0() {
     }
 
     critical_section::with(|cs| {
-        let mut ended = false;
         if let Some(game) = &mut *G_GAME.borrow(cs).borrow_mut() {
             if game.has_ended() {
-                ended = true;
-            }
-            game.rotate_block();
+                game.reset();
+            } else {
+                game.rotate_block();
 
-            if let Some(disp) = &mut *G_DISP.borrow(cs).borrow_mut() {
-                draw(game, disp);
+                if let Some(disp) = &mut *G_DISP.borrow(cs).borrow_mut() {
+                    draw(game, disp);
+                }
             }
-        }
-        if ended {
-            G_GAME.borrow(cs).replace(Some(Tetris::init()));
         }
     });
 }
@@ -350,25 +347,22 @@ fn EXTI_LINE0() {
 #[no_mangle]
 fn EXTI_LINE1() {
     let extiline = ExtiLine::from_gpio_line(1).unwrap();
+
     if hal::exti::Exti::is_pending(extiline) {
         hal::exti::Exti::clear(extiline);
     }
 
     critical_section::with(|cs| {
-        let mut ended = false;
         if let Some(game) = &mut *G_GAME.borrow(cs).borrow_mut() {
             if game.has_ended() {
-                ended = true;
-            }
+                game.reset();
+            } else {
+                game.move_block();
 
-            game.move_block();
-
-            if let Some(disp) = &mut *G_DISP.borrow(cs).borrow_mut() {
-                draw(game, disp);
+                if let Some(disp) = &mut *G_DISP.borrow(cs).borrow_mut() {
+                    draw(game, disp);
+                }
             }
-        }
-        if ended {
-            G_GAME.borrow(cs).replace(Some(Tetris::init()));
         }
     });
 }

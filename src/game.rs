@@ -326,6 +326,16 @@ impl Tetris {
         self.has_ended
     }
 
+    pub fn reset(&mut self) {
+        self.current_block = None;
+        self.block_cooldown = 0;
+        self.grid = [bitarr![0; 8]; 32];
+        self.rng = Rand32::new(8);
+        self.move_direction = MoveDirection::Left;
+        self.score = 0;
+        self.has_ended = false;
+    }
+
     pub fn run(&mut self) {
         if self.has_ended {
             return;
