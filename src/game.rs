@@ -10,7 +10,7 @@ enum MoveDirection {
 pub struct Block {
     pub shape: [BitArr!(for 4); 4],
     pub size: u8,
-    pub pos: (i8, i8),
+    pub pos: (i32, i32),
 }
 
 impl Block {
@@ -169,18 +169,22 @@ impl Tetris {
     }
 
     fn bounds_check(&mut self, block: &Block) -> bool {
+        let grid_height: i32 = self.grid.len() as i32;
         for (i, _) in block.shape.iter().enumerate() {
-            for (j, _) in block.shape.iter().enumerate() {
-                if let Some(bit) = block.shape[i].get(j) {
-                    let x = block.pos.0 + j as i8;
-                    let y = block.pos.1 + i as i8;
-                    if bit == true {
-                        if y < 0 || y > (self.grid.len() - 1) as i8 || x > 7 || x < 0 {
+            for (j, bit) in block.shape[i].iter().enumerate() {
+                let x = block.pos.0 + j as i32;
+                let y = block.pos.1 + i as i32;
+
+                if *bit {
+                    // x or y out of the bounds of the grid
+                    if !(0..=grid_height).contains(&y) || !(0..=7).contains(&x) {
+                        return false;
+                    }
+
+                    // overlapping with existing grid pixels
+                    if let Some(grid_bit) = self.grid[y as usize].get(x as usize) {
+                        if *grid_bit {
                             return false;
-                        } else if let Some(grid_bit) = self.grid[y as usize].get(x as usize) {
-                            if grid_bit == true {
-                                return false;
-                            }
                         }
                     }
                 }
@@ -271,6 +275,9 @@ impl Tetris {
             let mut clear_row_y = 0;
             for (y, row) in self.grid.iter().enumerate() {
                 // check if row is clear
+                // let's allow 2 missing pixels/blocks since
+                // the screen is quite small and its borders
+                // are hard to make out..
                 if row.count_ones() >= 7 {
                     is_clear = true;
                     clear_row_y = y;
@@ -288,7 +295,7 @@ impl Tetris {
         if let Some(block) = &self.current_block {
             for (i, _) in block.shape.iter().enumerate() {
                 for (_, bit) in block.shape[i].iter().enumerate() {
-                    let y = block.pos.1 + i as i8;
+                    let y = block.pos.1 + i as i32;
                     if y <= 1 && *bit {
                         return true;
                     }

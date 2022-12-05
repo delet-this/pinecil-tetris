@@ -272,9 +272,9 @@ fn draw(game: &mut Tetris, disp: &mut DisplayTypeAlias) {
     if let Some(block) = game.get_block() {
         for (i, row) in block.shape.iter().enumerate() {
             for (j, bit) in row.iter().enumerate() {
-                let x: i32 = (j as i32 + i32::from(block.pos.0)) * 2;
+                let x: i32 = (j as i32 + block.pos.0) * 2;
                 // let y: i32 = 95 - (i as i32 + block.pos.1 as i32) * 2 - 1;
-                let y: i32 = (i as i32 + i32::from(block.pos.1)) * 2 - 1 + VERT_OFFSET;
+                let y: i32 = (i as i32 + block.pos.1) * 2 - 1 + VERT_OFFSET;
                 if *bit {
                     Rectangle::new(Point::new(x, y), Size::new(2, 2))
                         .into_styled(thin_stroke)
